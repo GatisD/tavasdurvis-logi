@@ -106,9 +106,7 @@ if (!defined('ABSPATH')) {
             <div class="pvc-options-grid pvc-options-3 pvc-profiles-logs" style="display: none;">
                 <div class="pvc-option pvc-profile-option" data-value="rehau-80">
                     <div class="pvc-option-image pvc-profile-image">
-                        <div class="pvc-profile-placeholder" style="background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);">
-                            <span>Rehau 80</span>
-                        </div>
+                        <img src="<?php echo esc_url(PVC_CALC_PLUGIN_URL . 'assets/TavasDurvis-Logi-Images/DRUTEX LOGI/IGLO 5 CLASSIC.png'); ?>" alt="Rehau 80">
                     </div>
                     <span class="pvc-option-label">Rehau 80</span>
                     <div class="pvc-profile-specs">
@@ -119,9 +117,7 @@ if (!defined('ABSPATH')) {
                 </div>
                 <div class="pvc-option pvc-profile-option" data-value="premium-82">
                     <div class="pvc-option-image pvc-profile-image">
-                        <div class="pvc-profile-placeholder" style="background: linear-gradient(135deg, #d4a574 0%, #8b6914 100%);">
-                            <span>Premium 82</span>
-                        </div>
+                        <img src="<?php echo esc_url(PVC_CALC_PLUGIN_URL . 'assets/TavasDurvis-Logi-Images/DRUTEX LOGI/IGLO EDGE.png'); ?>" alt="Premium 82">
                     </div>
                     <span class="pvc-option-label">Premium 82</span>
                     <div class="pvc-profile-specs">
@@ -132,9 +128,7 @@ if (!defined('ABSPATH')) {
                 </div>
                 <div class="pvc-option pvc-profile-option" data-value="rehau-energy">
                     <div class="pvc-option-image pvc-profile-image">
-                        <div class="pvc-profile-placeholder" style="background: linear-gradient(135deg, #888 0%, #444 100%);">
-                            <span>Energy+</span>
-                        </div>
+                        <img src="<?php echo esc_url(PVC_CALC_PLUGIN_URL . 'assets/TavasDurvis-Logi-Images/DRUTEX LOGI/IGLO ENERGY CLASSIC.png'); ?>" alt="REHAU Energy +">
                     </div>
                     <span class="pvc-option-label">REHAU Energy +</span>
                     <div class="pvc-profile-specs">
@@ -149,9 +143,7 @@ if (!defined('ABSPATH')) {
             <div class="pvc-options-grid pvc-options-1 pvc-profiles-ardurvis" style="display: none;">
                 <div class="pvc-option pvc-profile-option selected" data-value="rehau-energy-durvis">
                     <div class="pvc-option-image pvc-profile-image">
-                        <div class="pvc-profile-placeholder" style="background: linear-gradient(135deg, #888 0%, #444 100%);">
-                            <span>Energy+</span>
-                        </div>
+                        <img src="<?php echo esc_url(PVC_CALC_PLUGIN_URL . 'assets/TavasDurvis-Logi-Images/PVC ARDURVIS/1.jpg'); ?>" alt="REHAU Energy + durvis">
                     </div>
                     <span class="pvc-option-label">REHAU Energy + durvis</span>
                     <div class="pvc-profile-specs">
@@ -166,9 +158,7 @@ if (!defined('ABSPATH')) {
             <div class="pvc-options-grid pvc-options-1 pvc-profiles-bidamas" style="display: none;">
                 <div class="pvc-option pvc-profile-option selected" data-value="lift-slide-hs">
                     <div class="pvc-option-image pvc-profile-image">
-                        <div class="pvc-profile-placeholder" style="background: linear-gradient(135deg, #555 0%, #222 100%);">
-                            <span>HS</span>
-                        </div>
+                        <img src="<?php echo esc_url(PVC_CALC_PLUGIN_URL . 'assets/TavasDurvis-Logi-Images/ALUMINIJA LOGI/MB 86 N SI.png'); ?>" alt="Lift and Slide HS Salamander">
                     </div>
                     <span class="pvc-option-label">Lift and Slide HS Salamander</span>
                     <div class="pvc-profile-specs">
@@ -210,6 +200,7 @@ if (!defined('ABSPATH')) {
             <div class="pvc-size-inputs">
                 <div class="pvc-size-preview">
                     <div class="pvc-size-preview-window">
+                        <div id="pvc-size-division-preview" class="pvc-size-division-preview"></div>
                         <div class="pvc-size-width">
                             <span class="pvc-size-value" id="preview-width">1000</span>
                             <span class="pvc-size-unit">mm</span>
@@ -332,7 +323,7 @@ if (!defined('ABSPATH')) {
                 <h2 class="pvc-step-title">8. Stiklojums</h2>
                 <p class="pvc-step-description">Izvēlieties stiklojuma veidu.</p>
             </div>
-            <div class="pvc-options-grid pvc-options-2 pvc-glazing-options">
+            <div class="pvc-options-grid pvc-options-4 pvc-glazing-options">
                 <div class="pvc-option pvc-glazing-option" data-value="2-slanu">
                     <div class="pvc-option-image">
                         <svg viewBox="0 0 80 100" class="pvc-icon">
@@ -360,6 +351,35 @@ if (!defined('ABSPATH')) {
                     <span class="pvc-option-label">3 Slāņu</span>
                     <div class="pvc-glazing-specs">
                         <small>Trīskāršais stiklojums</small>
+                    </div>
+                </div>
+                <div class="pvc-option pvc-glazing-option" data-value="2-slanu-termo">
+                    <div class="pvc-option-image">
+                        <svg viewBox="0 0 80 100" class="pvc-icon">
+                            <rect x="15" y="10" width="50" height="80" fill="#e8f4fc" stroke="#666" stroke-width="2"/>
+                            <line x1="15" y1="50" x2="65" y2="50" stroke="#999" stroke-width="1"/>
+                            <text x="40" y="30" text-anchor="middle" font-size="10" fill="#666">2</text>
+                            <text x="40" y="70" text-anchor="middle" font-size="8" fill="#e53935">TERMO</text>
+                        </svg>
+                    </div>
+                    <span class="pvc-option-label">2 Slāņu ar termo</span>
+                    <div class="pvc-glazing-specs">
+                        <small>Divkāršais ar termo</small>
+                    </div>
+                </div>
+                <div class="pvc-option pvc-glazing-option" data-value="3-slanu-termo">
+                    <div class="pvc-option-image">
+                        <svg viewBox="0 0 80 100" class="pvc-icon">
+                            <rect x="15" y="10" width="50" height="80" fill="#e8f4fc" stroke="#666" stroke-width="2"/>
+                            <line x1="15" y1="37" x2="65" y2="37" stroke="#999" stroke-width="1"/>
+                            <line x1="15" y1="63" x2="65" y2="63" stroke="#999" stroke-width="1"/>
+                            <text x="40" y="26" text-anchor="middle" font-size="10" fill="#666">3</text>
+                            <text x="40" y="56" text-anchor="middle" font-size="8" fill="#e53935">TERMO</text>
+                        </svg>
+                    </div>
+                    <span class="pvc-option-label">3 Slāņu ar termo</span>
+                    <div class="pvc-glazing-specs">
+                        <small>Trīskāršais ar termo</small>
                     </div>
                 </div>
             </div>
@@ -462,6 +482,12 @@ if (!defined('ABSPATH')) {
                     <div class="pvc-input-group">
                         <label for="customer-message">Papildu komentāri</label>
                         <textarea id="customer-message" name="customer_message" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="pvc-form-row">
+                    <div class="pvc-input-group">
+                        <label for="customer-file">Pievienot failu</label>
+                        <input type="file" id="customer-file" name="customer_file" accept=".pdf,.jpg,.jpeg,.png,.webp">
                     </div>
                 </div>
                 <div class="pvc-form-submit">

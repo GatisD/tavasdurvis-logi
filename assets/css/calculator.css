@@ -319,6 +319,14 @@
     color: var(--pvc-text-light);
 }
 
+.pvc-profile-image img {
+    max-width: 90px;
+    max-height: 90px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
 /* Color Options */
 .pvc-color-option {
     padding: 15px;
@@ -413,6 +421,24 @@
     justify-content: center;
 }
 
+.pvc-size-division-preview {
+    position: absolute;
+    inset: 8px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.pvc-size-division-preview img,
+.pvc-size-division-preview .pvc-icon {
+    max-width: 100%;
+    max-height: 100%;
+    opacity: 0.3;
+    object-fit: contain;
+}
+
 .pvc-size-width {
     position: absolute;
     bottom: -40px;
@@ -426,6 +452,7 @@
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 14px;
+    z-index: 2;
 }
 
 .pvc-size-height {
@@ -441,6 +468,7 @@
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 14px;
+    z-index: 2;
 }
 
 .pvc-size-value {
@@ -719,4 +747,11 @@
 .pvc-inside-colors.disabled {
     opacity: 0.4;
     pointer-events: none;
+}
+
+.pvc-division-custom-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
 }

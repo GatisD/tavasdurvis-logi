@@ -23,6 +23,33 @@
         }
     };
 
+
+
+    const pluginUrl = (typeof pvcCalc !== 'undefined' && pvcCalc.pluginUrl) ? pvcCalc.pluginUrl : '';
+
+    function buildAssetUrl(relativePath) {
+        if (!pluginUrl) return '';
+        return `${pluginUrl}${relativePath}`;
+    }
+
+    function getDivisionAsset(productType, id) {
+        const divisionSettings = (typeof pvcCalc !== 'undefined' && pvcCalc.settings && pvcCalc.settings.divisionTypes) ? pvcCalc.settings.divisionTypes : [];
+        const custom = divisionSettings.find(item => item.for_product === productType && String(item.id) === String(id) && item.custom_image);
+        if (custom && custom.custom_image) {
+            return custom.custom_image;
+        }
+
+        if (productType === 'logs') {
+            return buildAssetUrl(`assets/TavasDurvis-Logi-Images/LOGU PROFILI/${id}.png`);
+        }
+
+        if (productType === 'ardurvis') {
+            return buildAssetUrl(`assets/TavasDurvis-Logi-Images/PVC ARDURVIS/${id}.jpg`);
+        }
+
+        return '';
+    }
+
     // Division Types Configuration
     const divisionTypes = {
         logs: [
@@ -168,6 +195,7 @@
         updateNavigation();
         renderDivisionTypes();
         renderOpeningTypes();
+        updateSizePreview();
     }
 
     // Bind Events
@@ -189,6 +217,7 @@
         $(document).on('click', '.pvc-step[data-step="3"] .pvc-option', function () {
             selectOption($(this), 'divisionType');
             renderOpeningTypes();
+            renderSizeDivisionPreview();
         });
 
         // Step 4: Opening Type Selection
@@ -302,10 +331,15 @@
         const types = divisionTypes[state.selections.productType] || divisionTypes.logs;
 
         types.forEach(type => {
+            const imageUrl = getDivisionAsset(state.selections.productType || 'logs', type.id);
+            const visual = imageUrl
+                ? `<img src="${imageUrl}" alt="${type.label}" class="pvc-division-custom-image" loading="lazy">`
+                : type.svg;
+
             const html = `
                 <div class="pvc-option pvc-division-option" data-value="${type.id}">
                     <div class="pvc-option-image">
-                        ${type.svg}
+                        ${visual}
                     </div>
                     <span class="pvc-option-label">${type.label}</span>
                 </div>
@@ -346,6 +380,32 @@
     function updateSizePreview() {
         $('#preview-width').text(state.selections.width);
         $('#preview-height').text(state.selections.height);
+        renderSizeDivisionPreview();
+    }
+
+    function renderSizeDivisionPreview() {
+        const container = $('#pvc-size-division-preview');
+        if (!container.length) return;
+
+        container.empty();
+
+        if (!state.selections.divisionType) {
+            return;
+        }
+
+        const productType = state.selections.productType || 'logs';
+        const types = divisionTypes[productType] || divisionTypes.logs;
+        const selected = types.find(item => String(item.id) === String(state.selections.divisionType));
+
+        if (!selected) return;
+
+        const imageUrl = getDivisionAsset(productType, selected.id);
+        if (imageUrl) {
+            container.append(`<img src="${imageUrl}" alt="${selected.label}" loading="lazy">`);
+            return;
+        }
+
+        container.append(selected.svg || '');
     }
 
     // Navigation
@@ -536,8 +596,24 @@
             customer_message: $('#customer-message').val()
         };
 
+        const formData = new FormData();
+        Object.keys(data).forEach(key => {
+            formData.append(key, data[key]);
+        });
+
+        const fileInput = $('#customer-file')[0];
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+            formData.append('customer_file', fileInput.files[0]);
+        }
+
         // Submit via AJAX
-        $.post(pvcCalc.ajaxUrl, data)
+        $.ajax({
+            url: pvcCalc.ajaxUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false
+        })
             .done(function (response) {
                 if (response.success) {
                     // Show success message
@@ -589,6 +665,7 @@
         $('.pvc-inside-colors').removeClass('disabled');
 
         updateSizePreview();
+        renderSizeDivisionPreview();
         goToStep(1);
     }
 

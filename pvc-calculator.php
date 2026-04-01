@@ -71,6 +71,7 @@ class PVC_Calculator {
             wp_localize_script('pvc-calculator-script', 'pvcCalc', array(
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('pvc_calculator_nonce'),
+                'pluginUrl' => PVC_CALC_PLUGIN_URL,
                 'settings' => pvc_get_calculator_settings(),
                 'strings' => array(
                     'required' => __('Šis lauks ir obligāts', 'pvc-calculator'),
@@ -165,11 +166,9 @@ class PVC_Calculator {
             wp_send_json_error(array('message' => __('Lūdzu, aizpildiet visus obligātos laukus.', 'pvc-calculator')));
         }
         
-        // Build email content
-        $email_content = $this->build_email_content($data);
-        
         // Try to generate PDF attachment (optional - email will work without it)
         $attachments = array();
+        $uploaded_file_name = '';
         try {
             $pdf_generator = new PVC_PDF_Generator($data);
             $pdf_path = $pdf_generator->generate();
@@ -180,6 +179,18 @@ class PVC_Calculator {
             // PDF generation failed - continue without attachment
             error_log('PVC Calculator PDF generation failed: ' . $e->getMessage());
         }
+
+        if (!empty($_FILES['customer_file']['name'])) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            $uploaded = wp_handle_upload($_FILES['customer_file'], array('test_form' => false));
+            if (!isset($uploaded['error']) && !empty($uploaded['file']) && file_exists($uploaded['file'])) {
+                $attachments[] = $uploaded['file'];
+                $uploaded_file_name = basename($uploaded['file']);
+            }
+        }
+
+        // Build email content
+        $email_content = $this->build_email_content($data, $uploaded_file_name);
         
         // Get admin email
         $admin_email = get_option('pvc_calc_admin_email', get_option('admin_email'));
@@ -202,7 +213,7 @@ class PVC_Calculator {
         }
     }
     
-    private function build_email_content($data) {
+    private function build_email_content($data, $uploaded_file_name = '') {
         $product_types = array(
             'logs' => 'Logs',
             'ardurvis' => 'Ārdurvis',
@@ -254,6 +265,9 @@ class PVC_Calculator {
         $html .= '<p style="margin: 8px 0;"><strong>Vārds:</strong> ' . esc_html($data['name']) . '</p>';
         $html .= '<p style="margin: 8px 0;"><strong>E-pasts:</strong> <a href="mailto:' . esc_attr($data['email']) . '" style="color: #0066cc;">' . esc_html($data['email']) . '</a></p>';
         $html .= '<p style="margin: 8px 0;"><strong>Tālrunis:</strong> <a href="tel:' . esc_attr($data['phone']) . '" style="color: #0066cc;">' . esc_html($data['phone']) . '</a></p>';
+        if (!empty($uploaded_file_name)) {
+            $html .= '<p style="margin: 8px 0;"><strong>Pievienots fails:</strong> ' . esc_html($uploaded_file_name) . '</p>';
+        }
         
         if (!empty($data['message'])) {
             $html .= '<p style="margin: 15px 0 8px 0;"><strong>Ziņojums:</strong></p>';
