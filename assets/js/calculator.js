@@ -195,12 +195,9 @@
 
     // Initialize Calculator
     function init() {
-        $('.pvc-progress-step[data-step="4"], .pvc-progress-step[data-step="7"]').hide();
-        $('.pvc-step[data-step="4"]').hide();
         bindEvents();
         updateNavigation();
         renderDivisionTypes();
-        renderOpeningTypes();
         updateSizePreview();
     }
 
@@ -226,11 +223,6 @@
             renderSizeDivisionPreview();
         });
 
-        // Step 4: Opening Type Selection
-        $(document).on('click', '.pvc-step[data-step="4"] .pvc-option', function () {
-            selectOption($(this), 'openingType');
-        });
-
         // Step 5: Size Inputs
         $('#pvc-width, #pvc-height').on('input', function () {
             const field = $(this).attr('id') === 'pvc-width' ? 'width' : 'height';
@@ -244,17 +236,19 @@
             selectOption($(this), 'outsideColor');
         });
 
-        // Step 7: Same Color Checkbox
+        // Same Color Checkbox
         $('#pvc-same-color').on('change', function () {
             state.selections.sameColor = $(this).is(':checked');
             if (state.selections.sameColor) {
                 state.selections.insideColor = state.selections.outsideColor;
                 $('.pvc-inside-colors').addClass('disabled');
+                $('.pvc-inside-color-label').addClass('disabled-label');
                 // Select the same color visually
                 $('.pvc-inside-colors .pvc-option').removeClass('selected');
                 $(`.pvc-inside-colors .pvc-option[data-value="${state.selections.outsideColor}"]`).addClass('selected');
             } else {
                 $('.pvc-inside-colors').removeClass('disabled');
+                $('.pvc-inside-color-label').removeClass('disabled-label');
             }
             updateNavigation();
         });
@@ -269,11 +263,6 @@
         // Step 8: Glazing Selection
         $('.pvc-step[data-step="8"] .pvc-option').on('click', function () {
             selectOption($(this), 'glazing');
-        });
-
-        // Step 9: Handle Selection
-        $('.pvc-step[data-step="9"] .pvc-option').on('click', function () {
-            selectOption($(this), 'handle');
         });
 
         // Navigation
@@ -394,6 +383,7 @@
         if (!container.length) return;
 
         container.empty();
+        $('.pvc-size-preview-window').removeClass('has-division-image');
 
         if (!state.selections.divisionType) {
             return;
@@ -409,6 +399,7 @@
 
         if (imageUrl) {
             container.append(`<img src="${imageUrl}" alt="${selected.label}" class="pvc-size-division-image" loading="lazy">`);
+            $('.pvc-size-preview-window').addClass('has-division-image');
             return;
         }
 
@@ -427,9 +418,13 @@
         if (nextStepNum === 4) {
             nextStepNum = 5;
         }
-        // Merge step 7 into step 6
+        // Step 7 merged into step 6
         if (nextStepNum === 7) {
             nextStepNum = 8;
+        }
+        // Remove step 9 from flow
+        if (nextStepNum === 9) {
+            nextStepNum = 10;
         }
 
         if (nextStepNum <= state.totalSteps) {
@@ -443,6 +438,9 @@
         // Skip division step for sliding doors when going back
         if (state.selections.productType === 'bidamas' && prevStepNum === 3) {
             prevStepNum = 2;
+        }
+        if (prevStepNum === 9) {
+            prevStepNum = 8;
         }
         if (prevStepNum === 7) {
             prevStepNum = 6;
@@ -523,8 +521,6 @@
                     return true;
                 }
                 return !!state.selections.divisionType;
-            case 4:
-                return true;
             case 5:
                 return state.selections.width >= 400 && state.selections.width <= 4000 &&
                     state.selections.height >= 400 && state.selections.height <= 3000;
@@ -534,8 +530,6 @@
                 return true;
             case 8:
                 return !!state.selections.glazing;
-            case 9:
-                return !!state.selections.handle;
             default:
                 return true;
         }
@@ -553,8 +547,7 @@
             { label: 'Izmēri', value: `${state.selections.width} x ${state.selections.height} mm` },
             { label: 'Krāsa ārā', value: getLabel('color', state.selections.outsideColor) },
             { label: 'Krāsa iekšā', value: state.selections.sameColor ? getLabel('color', state.selections.outsideColor) : getLabel('color', state.selections.insideColor) },
-            { label: 'Stiklojums', value: getLabel('glazing', state.selections.glazing) },
-            { label: 'Rokturis', value: getLabel('handle', state.selections.handle) }
+            { label: 'Stiklojums', value: getLabel('glazing', state.selections.glazing) }
         ];
 
         items.forEach(item => {
@@ -609,7 +602,6 @@
             inside_color: state.selections.sameColor ? getLabel('color', state.selections.outsideColor) : getLabel('color', state.selections.insideColor),
             inside_color_hex: state.selections.sameColor ? getColorHex(state.selections.outsideColor) : getColorHex(state.selections.insideColor),
             glazing: getLabel('glazing', state.selections.glazing),
-            handle: getLabel('handle', state.selections.handle),
             customer_name: $('#customer-name').val(),
             customer_email: $('#customer-email').val(),
             customer_phone: $('#customer-phone').val(),
