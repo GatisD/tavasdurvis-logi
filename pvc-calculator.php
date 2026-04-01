@@ -3,7 +3,7 @@
  * Plugin Name: PVC Logu Kalkulators
  * Plugin URI: https://example.com/pvc-calculator
  * Description: Multi-step PVC window and door configuration calculator without pricing
- * Version: 1.0.0
+ * Version: 1.3.1
  * Author: Your Company
  * Author URI: https://example.com
  * Text Domain: pvc-calculator
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-define('PVC_CALC_VERSION', '1.3.0');
+define('PVC_CALC_VERSION', '1.3.1');
 define('PVC_CALC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PVC_CALC_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -53,18 +53,21 @@ class PVC_Calculator {
     
     public function enqueue_frontend_assets() {
         if (!is_admin()) {
+            $style_version = $this->get_asset_version('assets/css/calculator.css');
+            $script_version = $this->get_asset_version('assets/js/calculator.js');
+
             wp_enqueue_style(
                 'pvc-calculator-style',
                 PVC_CALC_PLUGIN_URL . 'assets/css/calculator.css',
                 array(),
-                PVC_CALC_VERSION
+                $style_version
             );
             
             wp_enqueue_script(
                 'pvc-calculator-script',
                 PVC_CALC_PLUGIN_URL . 'assets/js/calculator.js',
                 array('jquery'),
-                PVC_CALC_VERSION,
+                $script_version,
                 true
             );
             
@@ -81,6 +84,16 @@ class PVC_Calculator {
                 )
             ));
         }
+    }
+
+    private function get_asset_version($relative_path) {
+        $absolute_path = PVC_CALC_PLUGIN_DIR . ltrim($relative_path, '/\\');
+
+        if (file_exists($absolute_path)) {
+            return (string) filemtime($absolute_path);
+        }
+
+        return PVC_CALC_VERSION;
     }
     
     public function enqueue_admin_assets($hook) {
