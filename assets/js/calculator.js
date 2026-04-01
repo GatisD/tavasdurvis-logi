@@ -23,6 +23,22 @@
         }
     };
 
+    const pluginUrl = (typeof pvcCalc !== 'undefined' && pvcCalc.pluginUrl) ? pvcCalc.pluginUrl : '';
+
+    function buildAssetUrl(relativePath) {
+        if (!pluginUrl) return '';
+        return `${pluginUrl}${relativePath}`;
+    }
+
+    function getDivisionAsset(productType, id) {
+        if (productType === 'logs') {
+            return buildAssetUrl(`assets/TavasDurvis-Logi-Images/LOGU PROFILI/${id}.png`);
+        }
+        if (productType === 'ardurvis') {
+            return buildAssetUrl(`assets/TavasDurvis-Logi-Images/PVC ARDURVIS/${id}.jpg`);
+        }
+        return '';
+    }
     // Division Types Configuration
     const divisionTypes = {
         logs: [
@@ -164,10 +180,13 @@
 
     // Initialize Calculator
     function init() {
+        $('.pvc-progress-step[data-step="4"], .pvc-progress-step[data-step="7"]').hide();
+        $('.pvc-step[data-step="4"]').hide();
         bindEvents();
         updateNavigation();
         renderDivisionTypes();
         renderOpeningTypes();
+        updateSizePreview();
     }
 
     // Bind Events
@@ -189,6 +208,7 @@
         $(document).on('click', '.pvc-step[data-step="3"] .pvc-option', function () {
             selectOption($(this), 'divisionType');
             renderOpeningTypes();
+            renderSizeDivisionPreview();
         });
 
         // Step 4: Opening Type Selection
@@ -205,7 +225,7 @@
         });
 
         // Step 6: Outside Color Selection
-        $('.pvc-step[data-step="6"] .pvc-option').on('click', function () {
+        $('.pvc-step[data-step="6"] .pvc-color-options:not(.pvc-inside-colors) .pvc-option').on('click', function () {
             selectOption($(this), 'outsideColor');
         });
 
@@ -225,7 +245,7 @@
         });
 
         // Step 7: Inside Color Selection
-        $('.pvc-step[data-step="7"] .pvc-inside-colors .pvc-option').on('click', function () {
+        $('.pvc-inside-colors .pvc-option').on('click', function () {
             if (!state.selections.sameColor) {
                 selectOption($(this), 'insideColor');
             }
@@ -346,6 +366,25 @@
     function updateSizePreview() {
         $('#preview-width').text(state.selections.width);
         $('#preview-height').text(state.selections.height);
+        renderSizeDivisionPreview();
+    }
+
+    function renderSizeDivisionPreview() {
+        const container = $('#pvc-size-division-preview');
+        if (!container.length) return;
+
+        container.empty();
+        if (!state.selections.divisionType) return;
+
+        const productType = state.selections.productType || 'logs';
+        const types = divisionTypes[productType] || divisionTypes.logs;
+        const selected = types.find(item => String(item.id) === String(state.selections.divisionType));
+        if (!selected) return;
+
+        const imageUrl = getDivisionAsset(productType, selected.id);
+        container.append(imageUrl
+            ? `<img src="${imageUrl}" alt="${selected.label}" class="pvc-size-division-image" loading="lazy">`
+            : (selected.svg || ''));
     }
 
     // Navigation
@@ -355,6 +394,14 @@
         // Skip division step for sliding doors
         if (state.selections.productType === 'bidamas' && nextStepNum === 3) {
             nextStepNum = 4;
+        }
+        // Remove step 4 from flow
+        if (nextStepNum === 4) {
+            nextStepNum = 5;
+        }
+        // Merge step 7 into step 6
+        if (nextStepNum === 7) {
+            nextStepNum = 8;
         }
 
         if (nextStepNum <= state.totalSteps) {
@@ -368,6 +415,12 @@
         // Skip division step for sliding doors when going back
         if (state.selections.productType === 'bidamas' && prevStepNum === 3) {
             prevStepNum = 2;
+        }
+        if (prevStepNum === 7) {
+            prevStepNum = 6;
+        }
+        if (prevStepNum === 4) {
+            prevStepNum = 3;
         }
 
         if (prevStepNum >= 1) {
@@ -443,14 +496,14 @@
                 }
                 return !!state.selections.divisionType;
             case 4:
-                return !!state.selections.openingType;
+                return true;
             case 5:
                 return state.selections.width >= 400 && state.selections.width <= 4000 &&
                     state.selections.height >= 400 && state.selections.height <= 3000;
             case 6:
-                return !!state.selections.outsideColor;
+                return !!state.selections.outsideColor && (!!state.selections.insideColor || state.selections.sameColor);
             case 7:
-                return !!state.selections.insideColor || state.selections.sameColor;
+                return true;
             case 8:
                 return !!state.selections.glazing;
             case 9:
@@ -469,7 +522,6 @@
             { label: 'Produkta veids', value: getLabel('product', state.selections.productType) },
             { label: 'Profils', value: getLabel('profile', state.selections.profile) },
             { label: 'Dalījuma veids', value: state.selections.divisionType ? getLabel('division', state.selections.divisionType, state.selections.productType) : 'Nav' },
-            { label: 'Vēršanās veids', value: state.selections.openingType ? getLabel('opening', state.selections.openingType, state.selections.productType) : '' },
             { label: 'Izmēri', value: `${state.selections.width} x ${state.selections.height} mm` },
             { label: 'Krāsa ārā', value: getLabel('color', state.selections.outsideColor) },
             { label: 'Krāsa iekšā', value: state.selections.sameColor ? getLabel('color', state.selections.outsideColor) : getLabel('color', state.selections.insideColor) },
@@ -536,8 +588,21 @@
             customer_message: $('#customer-message').val()
         };
 
+        const formData = new FormData();
+        Object.keys(data).forEach(key => formData.append(key, data[key]));
+        const fileInput = $('#customer-file')[0];
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+            formData.append('customer_file', fileInput.files[0]);
+        }
+
         // Submit via AJAX
-        $.post(pvcCalc.ajaxUrl, data)
+        $.ajax({
+            url: pvcCalc.ajaxUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false
+        })
             .done(function (response) {
                 if (response.success) {
                     // Show success message
@@ -589,6 +654,7 @@
         $('.pvc-inside-colors').removeClass('disabled');
 
         updateSizePreview();
+        renderSizeDivisionPreview();
         goToStep(1);
     }
 

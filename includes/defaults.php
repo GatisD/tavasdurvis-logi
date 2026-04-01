@@ -114,7 +114,9 @@ function pvc_get_default_colors() {
 function pvc_get_default_glazing() {
     return array(
         array('id' => '2-slanu', 'label' => '2 Slāņu', 'description' => 'Divkāršais stiklojums', 'enabled' => 1),
-        array('id' => '3-slanu', 'label' => '3 Slāņu', 'description' => 'Trīskāršais stiklojums', 'enabled' => 1)
+        array('id' => '3-slanu', 'label' => '3 Slāņu', 'description' => 'Trīskāršais stiklojums', 'enabled' => 1),
+        array('id' => '2-slanu-termo', 'label' => '2 Slāņu ar termo', 'description' => 'Divkāršais stiklojums ar termo pārklājumu', 'enabled' => 1),
+        array('id' => '3-slanu-termo', 'label' => '3 Slāņu ar termo', 'description' => 'Trīskāršais stiklojums ar termo pārklājumu', 'enabled' => 1)
     );
 }
 
@@ -267,4 +269,3 @@ function pvc_get_calculator_settings() {
         'labels' => get_option('pvc_calc_labels', pvc_get_default_labels())
     );
 }
-
