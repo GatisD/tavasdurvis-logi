@@ -616,12 +616,22 @@
             customer_message: $('#customer-message').val()
         };
 
+        const fileInput = $('#customer-file')[0];
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+            if (fileInput.files[0].size > 5 * 1024 * 1024) {
+                alert('Faila izmērs pārsniedz 5 MB. Lūdzu, izvēlieties mazāku failu.');
+                $btnText.show();
+                $btnLoader.hide();
+                $submitBtn.prop('disabled', false);
+                return;
+            }
+        }
+
         const formData = new FormData();
         Object.keys(data).forEach(key => {
             formData.append(key, data[key]);
         });
 
-        const fileInput = $('#customer-file')[0];
         if (fileInput && fileInput.files && fileInput.files[0]) {
             formData.append('customer_file', fileInput.files[0]);
         }
