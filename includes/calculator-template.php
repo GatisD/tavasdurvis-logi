@@ -266,10 +266,27 @@ if (!defined('ABSPATH')) {
                     <span class="pvc-option-label">Krēmkrāsa</span>
                 </div>
             </div>
+            <div class="pvc-same-color-option" style="margin-top: 25px;">
+                <label class="pvc-checkbox-label">
+                    <input type="checkbox" id="pvc-same-color" name="same_color">
+                    <span class="pvc-checkbox-custom"></span>
+                    <span>Tāda pati kā no ārpuses</span>
+                </label>
+            </div>
+            <div class="pvc-options-grid pvc-options-6 pvc-color-options pvc-inside-colors">
+                <div class="pvc-option pvc-color-option" data-value="balts"><div class="pvc-color-swatch" style="background: #ffffff; border: 1px solid #ddd;"></div><span class="pvc-option-label">Balts</span></div>
+                <div class="pvc-option pvc-color-option" data-value="antracits"><div class="pvc-color-swatch" style="background: #3d3d3d;"></div><span class="pvc-option-label">Antracīts</span></div>
+                <div class="pvc-option pvc-color-option" data-value="bruns"><div class="pvc-color-swatch" style="background: #5c4033;"></div><span class="pvc-option-label">Brūns</span></div>
+                <div class="pvc-option pvc-color-option" data-value="zelta-ozols"><div class="pvc-color-swatch" style="background: linear-gradient(135deg, #d4a574 0%, #8b6914 50%, #d4a574 100%);"></div><span class="pvc-option-label">Zelta ozols</span></div>
+                <div class="pvc-option pvc-color-option" data-value="tumsais-ozols"><div class="pvc-color-swatch" style="background: linear-gradient(135deg, #5c4033 0%, #3d2817 50%, #5c4033 100%);"></div><span class="pvc-option-label">Tumšais ozols</span></div>
+                <div class="pvc-option pvc-color-option" data-value="mahagons"><div class="pvc-color-swatch" style="background: linear-gradient(135deg, #8b3a3a 0%, #5c1a1a 50%, #8b3a3a 100%);"></div><span class="pvc-option-label">Mahagons</span></div>
+                <div class="pvc-option pvc-color-option" data-value="peleks"><div class="pvc-color-swatch" style="background: #808080;"></div><span class="pvc-option-label">Pelēks</span></div>
+                <div class="pvc-option pvc-color-option" data-value="kremkrasa"><div class="pvc-color-swatch" style="background: #f5f5dc;"></div><span class="pvc-option-label">Krēmkrāsa</span></div>
+            </div>
         </div>
 
         <!-- Step 7: Krāsa no iekšpuses -->
-        <div class="pvc-step" data-step="7">
+        <div class="pvc-step" data-step="7" style="display:none;">
             <div class="pvc-step-header">
                 <h2 class="pvc-step-title">7. Krāsa no iekšpuses</h2>
                 <p class="pvc-step-description">Izvēlieties krāsu no iekšpuses.</p>

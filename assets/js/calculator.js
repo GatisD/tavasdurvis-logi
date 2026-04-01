@@ -23,8 +23,6 @@
         }
     };
 
-
-
     const pluginUrl = (typeof pvcCalc !== 'undefined' && pvcCalc.pluginUrl) ? pvcCalc.pluginUrl : '';
 
     function buildAssetUrl(relativePath) {
@@ -33,8 +31,14 @@
     }
 
     function getDivisionAsset(productType, id) {
-        const divisionSettings = (typeof pvcCalc !== 'undefined' && pvcCalc.settings && pvcCalc.settings.divisionTypes) ? pvcCalc.settings.divisionTypes : [];
-        const custom = divisionSettings.find(item => item.for_product === productType && String(item.id) === String(id) && item.custom_image);
+        const divisionSettings = (typeof pvcCalc !== 'undefined' && pvcCalc.settings && pvcCalc.settings.divisionTypes)
+            ? pvcCalc.settings.divisionTypes
+            : [];
+
+        const custom = divisionSettings.find(
+            item => item.for_product === productType && String(item.id) === String(id) && item.custom_image
+        );
+
         if (custom && custom.custom_image) {
             return custom.custom_image;
         }
@@ -191,6 +195,8 @@
 
     // Initialize Calculator
     function init() {
+        $('.pvc-progress-step[data-step="4"], .pvc-progress-step[data-step="7"]').hide();
+        $('.pvc-step[data-step="4"]').hide();
         bindEvents();
         updateNavigation();
         renderDivisionTypes();
@@ -234,7 +240,7 @@
         });
 
         // Step 6: Outside Color Selection
-        $('.pvc-step[data-step="6"] .pvc-option').on('click', function () {
+        $('.pvc-step[data-step="6"] .pvc-color-options:not(.pvc-inside-colors) .pvc-option').on('click', function () {
             selectOption($(this), 'outsideColor');
         });
 
@@ -254,7 +260,7 @@
         });
 
         // Step 7: Inside Color Selection
-        $('.pvc-step[data-step="7"] .pvc-inside-colors .pvc-option').on('click', function () {
+        $('.pvc-inside-colors .pvc-option').on('click', function () {
             if (!state.selections.sameColor) {
                 selectOption($(this), 'insideColor');
             }
@@ -400,8 +406,9 @@
         if (!selected) return;
 
         const imageUrl = getDivisionAsset(productType, selected.id);
+
         if (imageUrl) {
-            container.append(`<img src="${imageUrl}" alt="${selected.label}" loading="lazy">`);
+            container.append(`<img src="${imageUrl}" alt="${selected.label}" class="pvc-size-division-image" loading="lazy">`);
             return;
         }
 
@@ -416,6 +423,14 @@
         if (state.selections.productType === 'bidamas' && nextStepNum === 3) {
             nextStepNum = 4;
         }
+        // Remove step 4 from flow
+        if (nextStepNum === 4) {
+            nextStepNum = 5;
+        }
+        // Merge step 7 into step 6
+        if (nextStepNum === 7) {
+            nextStepNum = 8;
+        }
 
         if (nextStepNum <= state.totalSteps) {
             goToStep(nextStepNum);
@@ -428,6 +443,12 @@
         // Skip division step for sliding doors when going back
         if (state.selections.productType === 'bidamas' && prevStepNum === 3) {
             prevStepNum = 2;
+        }
+        if (prevStepNum === 7) {
+            prevStepNum = 6;
+        }
+        if (prevStepNum === 4) {
+            prevStepNum = 3;
         }
 
         if (prevStepNum >= 1) {
@@ -503,14 +524,14 @@
                 }
                 return !!state.selections.divisionType;
             case 4:
-                return !!state.selections.openingType;
+                return true;
             case 5:
                 return state.selections.width >= 400 && state.selections.width <= 4000 &&
                     state.selections.height >= 400 && state.selections.height <= 3000;
             case 6:
-                return !!state.selections.outsideColor;
+                return !!state.selections.outsideColor && (!!state.selections.insideColor || state.selections.sameColor);
             case 7:
-                return !!state.selections.insideColor || state.selections.sameColor;
+                return true;
             case 8:
                 return !!state.selections.glazing;
             case 9:
@@ -529,7 +550,6 @@
             { label: 'Produkta veids', value: getLabel('product', state.selections.productType) },
             { label: 'Profils', value: getLabel('profile', state.selections.profile) },
             { label: 'Dalījuma veids', value: state.selections.divisionType ? getLabel('division', state.selections.divisionType, state.selections.productType) : 'Nav' },
-            { label: 'Vēršanās veids', value: state.selections.openingType ? getLabel('opening', state.selections.openingType, state.selections.productType) : '' },
             { label: 'Izmēri', value: `${state.selections.width} x ${state.selections.height} mm` },
             { label: 'Krāsa ārā', value: getLabel('color', state.selections.outsideColor) },
             { label: 'Krāsa iekšā', value: state.selections.sameColor ? getLabel('color', state.selections.outsideColor) : getLabel('color', state.selections.insideColor) },

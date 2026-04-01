@@ -198,11 +198,11 @@
     .pvc-options-6 {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .pvc-calculator-content {
         padding: 20px;
     }
-    
+
     .pvc-step-title {
         font-size: 22px;
     }
@@ -213,11 +213,11 @@
     .pvc-options-3 {
         grid-template-columns: 1fr;
     }
-    
+
     .pvc-progress {
         padding: 15px 10px;
     }
-    
+
     .pvc-progress-step .step-label {
         display: none;
     }
@@ -320,9 +320,9 @@
 }
 
 .pvc-profile-image img {
-    max-width: 90px;
-    max-height: 90px;
-    width: 100%;
+    max-width: 80px;
+    max-height: 80px;
+    width: auto;
     height: auto;
     object-fit: contain;
 }
@@ -423,7 +423,7 @@
 
 .pvc-size-division-preview {
     position: absolute;
-    inset: 8px;
+    inset: 10px;
     z-index: 1;
     display: flex;
     align-items: center;
@@ -431,12 +431,13 @@
     pointer-events: none;
 }
 
+.pvc-size-division-image,
 .pvc-size-division-preview img,
 .pvc-size-division-preview .pvc-icon {
-    max-width: 100%;
-    max-height: 100%;
-    opacity: 0.3;
+    max-width: 60%;
+    max-height: 60%;
     object-fit: contain;
+    opacity: 0.45;
 }
 
 .pvc-size-width {
