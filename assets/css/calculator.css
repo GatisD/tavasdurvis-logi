@@ -1,0 +1,722 @@
+/* PVC Calculator Styles */
+:root {
+    --pvc-primary: #e53935;
+    --pvc-primary-hover: #c62828;
+    --pvc-secondary: #666;
+    --pvc-bg: #f8f9fa;
+    --pvc-card-bg: #ffffff;
+    --pvc-border: #e0e0e0;
+    --pvc-text: #333;
+    --pvc-text-light: #666;
+    --pvc-success: #4caf50;
+    --pvc-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --pvc-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.12);
+    --pvc-radius: 12px;
+    --pvc-radius-sm: 8px;
+    --pvc-transition: all 0.3s ease;
+}
+
+/* Reset and Base */
+.pvc-calculator-wrapper {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--pvc-bg);
+    border-radius: var(--pvc-radius);
+}
+
+.pvc-calculator-wrapper * {
+    box-sizing: border-box;
+}
+
+/* Progress Steps */
+.pvc-progress {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    padding: 20px;
+    background: var(--pvc-card-bg);
+    border-radius: var(--pvc-radius);
+    box-shadow: var(--pvc-shadow);
+    overflow-x: auto;
+    gap: 8px;
+}
+
+.pvc-progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 80px;
+    cursor: pointer;
+    transition: var(--pvc-transition);
+    opacity: 0.5;
+}
+
+.pvc-progress-step.active,
+.pvc-progress-step.completed {
+    opacity: 1;
+}
+
+.pvc-progress-step .step-number {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pvc-border);
+    color: var(--pvc-text-light);
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 14px;
+    transition: var(--pvc-transition);
+    margin-bottom: 8px;
+}
+
+.pvc-progress-step.active .step-number {
+    background: var(--pvc-primary);
+    color: white;
+    transform: scale(1.1);
+}
+
+.pvc-progress-step.completed .step-number {
+    background: var(--pvc-success);
+    color: white;
+}
+
+.pvc-progress-step .step-label {
+    font-size: 11px;
+    color: var(--pvc-text-light);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.pvc-progress-step.active .step-label {
+    color: var(--pvc-primary);
+    font-weight: 600;
+}
+
+/* Calculator Content */
+.pvc-calculator-content {
+    background: var(--pvc-card-bg);
+    border-radius: var(--pvc-radius);
+    box-shadow: var(--pvc-shadow);
+    padding: 40px;
+    margin-bottom: 20px;
+    min-height: 400px;
+}
+
+/* Steps */
+.pvc-step {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.pvc-step.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Step Header */
+.pvc-step-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.pvc-step-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--pvc-text);
+    margin: 0 0 10px 0;
+}
+
+.pvc-step-description {
+    font-size: 16px;
+    color: var(--pvc-text-light);
+    margin: 0;
+}
+
+/* Options Grid */
+.pvc-options-grid {
+    display: grid;
+    gap: 20px;
+    justify-content: center;
+}
+
+.pvc-options-1 {
+    grid-template-columns: minmax(200px, 300px);
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.pvc-options-2 {
+    grid-template-columns: repeat(2, minmax(180px, 280px));
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.pvc-options-3 {
+    grid-template-columns: repeat(3, minmax(150px, 250px));
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pvc-options-4 {
+    grid-template-columns: repeat(4, minmax(140px, 200px));
+}
+
+.pvc-options-5 {
+    grid-template-columns: repeat(5, minmax(120px, 180px));
+}
+
+.pvc-options-6 {
+    grid-template-columns: repeat(6, minmax(100px, 160px));
+}
+
+@media (max-width: 1024px) {
+    .pvc-options-5,
+    .pvc-options-6 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .pvc-options-3,
+    .pvc-options-4,
+    .pvc-options-5,
+    .pvc-options-6 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .pvc-calculator-content {
+        padding: 20px;
+    }
+    
+    .pvc-step-title {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pvc-options-2,
+    .pvc-options-3 {
+        grid-template-columns: 1fr;
+    }
+    
+    .pvc-progress {
+        padding: 15px 10px;
+    }
+    
+    .pvc-progress-step .step-label {
+        display: none;
+    }
+}
+
+/* Option Card */
+.pvc-option {
+    background: var(--pvc-card-bg);
+    border: 2px solid var(--pvc-border);
+    border-radius: var(--pvc-radius);
+    padding: 20px 15px;
+    cursor: pointer;
+    transition: var(--pvc-transition);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pvc-option:hover {
+    border-color: var(--pvc-primary);
+    transform: translateY(-3px);
+    box-shadow: var(--pvc-shadow-hover);
+}
+
+.pvc-option.selected {
+    border-color: var(--pvc-primary);
+    background: linear-gradient(135deg, rgba(229, 57, 53, 0.05) 0%, rgba(229, 57, 53, 0.02) 100%);
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+}
+
+.pvc-option.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background: var(--pvc-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.pvc-option {
+    position: relative;
+}
+
+/* Option Image */
+.pvc-option-image {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.pvc-icon {
+    max-width: 80px;
+    max-height: 80px;
+    width: 100%;
+    height: auto;
+}
+
+.pvc-option-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pvc-text);
+}
+
+/* Profile specific styles */
+.pvc-profile-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 12px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.pvc-profile-specs {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.pvc-profile-specs small {
+    font-size: 11px;
+    color: var(--pvc-text-light);
+}
+
+/* Color Options */
+.pvc-color-option {
+    padding: 15px;
+}
+
+.pvc-color-swatch {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.pvc-color-option .pvc-option-label {
+    font-size: 12px;
+}
+
+/* Same color checkbox */
+.pvc-same-color-option {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.pvc-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    color: var(--pvc-text);
+}
+
+.pvc-checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.pvc-checkbox-custom {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--pvc-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--pvc-transition);
+}
+
+.pvc-checkbox-label input:checked + .pvc-checkbox-custom {
+    background: var(--pvc-primary);
+    border-color: var(--pvc-primary);
+}
+
+.pvc-checkbox-label input:checked + .pvc-checkbox-custom::after {
+    content: '✓';
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Glazing specs */
+.pvc-glazing-specs {
+    margin-top: 8px;
+}
+
+.pvc-glazing-specs small {
+    font-size: 11px;
+    color: var(--pvc-text-light);
+}
+
+/* Size Inputs */
+.pvc-size-inputs {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pvc-size-preview {
+    flex-shrink: 0;
+}
+
+.pvc-size-preview-window {
+    width: 200px;
+    height: 240px;
+    background: linear-gradient(135deg, #e8f4fc 0%, #d0e8f7 100%);
+    border: 4px solid #666;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pvc-size-width {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    background: var(--pvc-primary);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.pvc-size-height {
+    position: absolute;
+    right: -55px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    background: var(--pvc-primary);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.pvc-size-value {
+    font-weight: 600;
+}
+
+.pvc-size-unit {
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+.pvc-size-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Input Groups */
+.pvc-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pvc-input-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pvc-text);
+}
+
+.pvc-input-group input,
+.pvc-input-group textarea {
+    padding: 12px 16px;
+    border: 2px solid var(--pvc-border);
+    border-radius: var(--pvc-radius-sm);
+    font-size: 16px;
+    transition: var(--pvc-transition);
+    font-family: inherit;
+}
+
+.pvc-input-group input:focus,
+.pvc-input-group textarea:focus {
+    outline: none;
+    border-color: var(--pvc-primary);
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+}
+
+.pvc-input-group input[type="number"] {
+    width: 200px;
+}
+
+.pvc-input-hint {
+    font-size: 12px;
+    color: var(--pvc-text-light);
+}
+
+/* Summary */
+.pvc-summary {
+    background: var(--pvc-bg);
+    border-radius: var(--pvc-radius);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.pvc-summary h3 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    color: var(--pvc-text);
+}
+
+.pvc-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.pvc-summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.pvc-summary-label {
+    font-size: 12px;
+    color: var(--pvc-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pvc-summary-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--pvc-text);
+}
+
+/* Contact Form */
+.pvc-contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.pvc-form-row {
+    margin-bottom: 20px;
+}
+
+.pvc-form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .pvc-form-row-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pvc-form-submit {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* Success Message */
+.pvc-success-message {
+    text-align: center;
+    padding: 40px;
+    animation: fadeIn 0.5s ease;
+}
+
+.pvc-success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--pvc-success);
+    color: white;
+    font-size: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.pvc-success-message h3 {
+    font-size: 24px;
+    color: var(--pvc-text);
+    margin: 0 0 10px 0;
+}
+
+.pvc-success-message p {
+    font-size: 16px;
+    color: var(--pvc-text-light);
+    margin: 0 0 30px 0;
+}
+
+/* Buttons */
+.pvc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--pvc-radius-sm);
+    cursor: pointer;
+    transition: var(--pvc-transition);
+    font-family: inherit;
+}
+
+.pvc-btn-primary {
+    background: var(--pvc-primary);
+    color: white;
+}
+
+.pvc-btn-primary:hover:not(:disabled) {
+    background: var(--pvc-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+}
+
+.pvc-btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pvc-btn-secondary {
+    background: var(--pvc-bg);
+    color: var(--pvc-text);
+    border: 2px solid var(--pvc-border);
+}
+
+.pvc-btn-secondary:hover {
+    background: var(--pvc-border);
+}
+
+/* Navigation */
+.pvc-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    background: var(--pvc-card-bg);
+    border-radius: var(--pvc-radius);
+    box-shadow: var(--pvc-shadow);
+    padding: 20px 30px;
+}
+
+.pvc-navigation .pvc-btn-next {
+    margin-left: auto;
+}
+
+/* Spinner */
+.spinner {
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Division Types Grid for many items */
+.pvc-division-types {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+@media (max-width: 900px) {
+    .pvc-division-types {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .pvc-division-types {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .pvc-division-types {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Division option - smaller for many options */
+.pvc-division-option {
+    padding: 12px 8px;
+}
+
+.pvc-division-option .pvc-option-image {
+    height: 70px;
+}
+
+.pvc-division-option .pvc-icon {
+    max-width: 60px;
+    max-height: 60px;
+}
+
+.pvc-division-option .pvc-option-label {
+    font-size: 11px;
+}
+
+/* Opening types */
+.pvc-opening-types {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Inside colors disabled state */
+.pvc-inside-colors.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
