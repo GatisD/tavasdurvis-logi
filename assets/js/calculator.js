@@ -48,6 +48,9 @@
         }
 
         if (productType === 'ardurvis') {
+            if (Number(id) > 14) {
+                return '';
+            }
             return buildAssetUrl(`assets/TavasDurvis-Logi-Images/PVC ARDURVIS/${id}.jpg`);
         }
 
